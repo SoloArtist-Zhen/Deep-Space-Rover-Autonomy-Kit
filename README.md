@@ -1,18 +1,18 @@
 
-# Deep Space Rover Autonomy Kit（详细版 README，含图片说明）
+# Deep Space Rover Autonomy Kit
 
-> **面向顶会/顶刊对标**的行星车自主导航与智能控制开源起步包。特性：
-> - 高保真**月表地形**合成（多尺度噪声 + 陨坑 + 岩块）
-> - **风险感知**路径规划对比：A*、RRT*、蚁群优化（ACO）、强化学习（Q-learning）
-> - 基于地形梯度的**姿态稳定代理**与**能耗评估**
-> - **多车协同覆盖**（Voronoi 分区 + 局部 A* 推进）
-> - 自动生成 **19 张高级图** 和 `benchmarks.json` 指标
+>行星车自主导航与智能控制开源起步包。特性：
+>**月表地形**合成（多尺度噪声 + 陨坑 + 岩块）
+>**风险感知**路径规划对比：A*、RRT*、蚁群优化（ACO）、强化学习（Q-learning）
+>基于地形梯度的**姿态稳定代理**与**能耗评估**
+>**多车协同覆盖**（Voronoi 分区 + 局部 A* 推进）
+>自动生成 **19 张高级图** 和 `benchmarks.json` 指标
 >
-> 仅依赖：`numpy`、`matplotlib`（跨平台易跑、利于审稿复现）。
+
 
 ---
 
-## 1. 快速开始（Quick Start）
+## 1. 开始（Quick Start）
 
 ```bash
 python main.py
@@ -59,71 +59,45 @@ python main.py
 
 > 下列所有文件均由 `python main.py` 自动生成，数值随随机种子略有不同。
 
+<img width="960" height="720" alt="fig01_terrain_surface" src="https://github.com/user-attachments/assets/82168a4c-a4b7-43cb-9f4e-4070fb013763" />
+
 ### 图 1：`fig01_terrain_surface.png` — 3D 高保真月表地形
 - **看点**：多尺度纹理 + 陨坑/岩块的形态，适合测试**轮地相互作用**与**俯仰稳定**。  
 - **研究意义**：在无真实 DEM 时，提供**可控统计特性**的地形；后续可替换为 LRO/HiRISE DEM。
+  
+<img width="1020" height="765" alt="fig02_slope" src="https://github.com/user-attachments/assets/3722c5b6-a73b-42ba-b635-7e98c2906933" />
 
 ### 图 2：`fig02_slope.png` — 坡度（梯度范数）热图
 - **看点**：高坡区更亮，通常伴随高滑移/翻覆风险。  
 - **研究意义**：为**风险图/代价图**提供核心物理量。
 
+<img width="1020" height="765" alt="fig03_risk" src="https://github.com/user-attachments/assets/9e767cde-6af5-49ef-824e-724f91a42db5" />
+
 ### 图 3：`fig03_risk.png` — 滑移风险图
 - **看点**：坡度 + 粗糙度综合，岩块区**加权惩罚**；明亮区域即高风险。  
 - **研究意义**：可对标**traction-aware** 方法，检验“避险”能力。
+
+  <img width="1020" height="765" alt="fig04_cost" src="https://github.com/user-attachments/assets/c819eb4d-a7f4-471c-8a6c-99f30547a77c" />
 
 ### 图 4：`fig04_cost.png` — 通行代价图
 - **看点**：将**能耗/风险**合成统一代价域。  
 - **研究意义**：为 A*/ACO 等提供统一优化目标。
 
+  <img width="1020" height="765" alt="fig05_astar_path" src="https://github.com/user-attachments/assets/32a43efa-92a5-4f06-9c86-1f882a425602" />
+
 ### 图 5：`fig05_astar_path.png` — 风险感知 A* 路径
 - **看点**：在代价图上叠加路径；通常趋向**绕开高坡/岩块**。  
 - **研究意义**：网格基线，后续可替换为 **D\* Lite / Anytime Repairing A\*** 以支持**在线重规划**。
+
+  <img width="1020" height="765" alt="fig06_rrt_path" src="https://github.com/user-attachments/assets/5f04190c-5c49-42b4-b976-aab499276ad1" />
 
 ### 图 6：`fig06_rrt_path.png` — RRT\* 在障碍掩膜上的路径
 - **看点**：采样式对比基线；障碍由 `risk>阈值` 产生。  
 - **研究意义**：为 **BIT\***、**RRTX** 等 SOTA 提供替换位。
 
-### 图 7：`fig07_aco_path.png` — 蚁群（ACO）路径
-- **看点**：信息素/蒸发导致的**多样探索**；对代价图的敏感性强。  
-- **研究意义**：群智/仿生类算法的**可复现实验位**。
+<img width="1020" height="765" alt="fig07_aco_path" src="https://github.com/user-attachments/assets/17480f38-6993-4596-a38a-45c86581c74c" />
 
-### 图 8：`fig08_aco_convergence.png` — ACO 收敛曲线（最优代价 vs 迭代）
-- **看点**：曲线单调下降并趋稳表明**收敛**；若振荡，需调整信息素参数。  
-- **研究意义**：为**超参数研究**提供量化依据。
 
-### 图 9：`fig09_qlearn_path.png` — Q-learning 贪婪策略路径
-- **看点**：学习到的**可行路径**；早期可能不稳定。  
-- **研究意义**：可替换为 DRL（PPO/SAC）以提升**未知环境**能力。
-
-### 图 10：`fig10_qlearn_return.png` — Q-learning 回报曲线
-- **看点**：回报随训练提升；若不升或震荡大，需调学习率/探索率。  
-- **研究意义**：强化学习训练**可视化诊断**。
-
-### 图 11–13：`fig11_roll.png` / `fig12_pitch.png` / `fig13_yaw.png` — 姿态时序
-- **看点**：沿“**能耗最优**”路径的滚转/俯仰/偏航曲线。  
-- **研究意义**：验证**姿态稳定性**与**平台安全裕度**；后续可接入 MPC/LQR。
-
-### 图 14：`fig14_risk_along.png` — 路径沿线风险序列
-- **看点**：显示“关键风险区间”；便于做**安全约束**与**软硬件冗余**设计。
-
-### 图 15：`fig15_pareto_len_energy.png` — 帕累托：长度 vs 能耗
-- **看点**：不同规划器的**折中关系**；左下角区域为理想。  
-- **研究意义**：审稿常问的**多指标对比**视图之一。
-
-### 图 16：`fig16_pareto_energy_risk.png` — 帕累托：能耗 vs 平均风险
-- **看点**：能耗-安全的**二元权衡**；为任务需求选型提供依据。
-
-### 图 17：`fig17_voronoi.png` — 多车 Voronoi 分区
-- **看点**：多车职责区，减少重叠与冲突。  
-- **研究意义**：可扩展到**Lloyd/自组织分区**、**通信约束**与**任务拍卖**。
-
-### 图 18：`fig18_coverage.png` — 最终覆盖热图
-- **看点**：覆盖完成度直观化；黑/白对比越明显越好。
-
-### 图 19：`fig19_coverage_curve.png` — 覆盖率-时间曲线
-- **看点**：反映协同效率；曲线越快逼近 1 越好。
-
----
 
 ## 5. 指标文件（`outputs/benchmarks.json`）
 - `best_planner`：本次运行能耗最优的规划器名称；  
@@ -133,17 +107,7 @@ python main.py
 
 ---
 
-## 6. 复现性 & 扩展到顶会/顶刊
-- **复现**：单文件 `main.py` 一键生成；随机种子可在 `terrain.py`/`main.py` 中修改。  
-- **顶会扩展建议**：
-  - **SOTA 替换**：D* Lite/RRTX/BIT*、风险-牵引力感知 A*、MPC/LQR、DRL（PPO/SAC）。  
-  - **物理逼真**：真实 DEM、轮地相互作用（滑移/侧偏/翻覆裕度）、能耗模型。  
-  - **协同策略**：拍卖/CBBA、通信延迟/丢包、局部-全局地图一致性。  
-  - **评测协议**：多场景（平缓/岩块密集/陨坑密集/混合），统一超参，**统计显著性**。
-
----
-
-## 7. 目录结构
+## 6. 目录结构
 ```
 deep_space_rover_kit/
 ├─ modules/
@@ -156,15 +120,3 @@ deep_space_rover_kit/
 ├─ main.py              # 一键运行入口
 ├─ README.md            # 简版说明
 └─ README_detailed.md   # 本文件（图文详解）
-```
-
----
-
-## 8. 常见问题（FAQ）
-- **图片没生成？** 请确认 `numpy` 与 `matplotlib` 已安装；或直接查看压缩包中已附的示例 `outputs/`。  
-- **如何替换为 DEM？** 将 DEM 读为二维数组赋给 `Z` 并跳过地形合成步骤；余下流程不变。  
-- **需要外部深度库吗？** 本版本不需要；若要加 DRL，请新建模块，不破坏当前轻依赖结构。
-
----
-
-（完）
