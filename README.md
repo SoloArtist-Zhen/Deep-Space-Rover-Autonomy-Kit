@@ -110,13 +110,65 @@ python main.py
 ## 6. 目录结构
 ```
 deep_space_rover_kit/
-├─ modules/
-│  ├─ terrain.py        # 地形/坡度/风险/代价
-│  ├─ planners.py       # A* / RRT* / ACO / Q-learning
-│  ├─ controllers.py    # 路径跟随 + 姿态代理 + 能耗
-│  ├─ multiagent.py     # 多车Voronoi + 覆盖推进
-│  └─ viz.py            # 可视化（3D/热图/叠加/帕累托）
-├─ outputs/             # 19张图 + benchmarks.json
-├─ main.py              # 一键运行入口
-├─ README.md            # 简版说明
-└─ README_detailed.md   # 本文件（图文详解）
+├── configs/
+│   └── research_mission_profile.yaml          # Publication-facing mission specification
+├── docs/
+│   ├── architecture.md                        # Architecture/data-flow document
+│   ├── rhea_method.md                         # Publication-facing method section draft
+│   └── simulation_validation_framework.md     # Gazebo validation design
+├── experiments/
+│   ├── run_hierarchical_demo.py               # Pure-Python research demo entrypoint
+│   ├── run_validation_suite.py                # Reproducible validation benchmark
+│   └── train_mdp_policy.py                    # Simulation-based MDP policy training
+├── legacy/
+│   └── prototype/                             # Archived baseline implementation
+│       ├── baseline_main.py
+│       └── modules/
+├── outputs/                                   # Figures + JSON summaries
+├── ros2_ws/
+│   └── src/
+│       └── space_rover_autonomy/
+│           ├── config/autonomy_stack.yaml     # ROS2 parameters
+│           ├── config/gazebo_validation.yaml  # Gazebo validation parameters
+│           ├── launch/hierarchical_autonomy.launch.py
+│           ├── launch/gazebo_validation.launch.py
+│           ├── package.xml
+│           ├── setup.py
+│           └── space_rover_autonomy/
+│               ├── core/
+│               │   ├── models.py             # Mission/world/path/control data contracts
+│               │   └── topics.py             # ROS2 topic graph
+│               ├── interfaces/
+│               │   ├── sensors.py            # RGB / LiDAR / state sensor adapters
+│               │   └── actuators.py          # Extensible actuator adapters
+│               ├── perception/
+│               │   ├── foundation_features.py# DINOv2 feature extraction
+│               │   ├── semantic_fusion.py    # Semantic occupancy + LiDAR fusion
+│               │   ├── terrain_analysis.py   # Supporting geometric operators
+│               │   └── world_model_builder.py
+│               ├── mission_planning/
+│               │   ├── task_scheduler.py     # Task ordering and feasibility filtering
+│               │   └── mission_planner.py    # Mission-level constraints and active task
+│               ├── decision_making/
+│               │   ├── behavior_manager.py   # Task execution mode switching
+│               │   ├── mdp.py                # Belief-state MDP / POMDP-lite simulator
+│               │   ├── mcts.py               # MCTS policy + learned prior table
+│               │   ├── training.py           # Simulation-based policy training
+│               │   ├── planners.py           # Classical planner baselines
+│               │   └── resource_aware_planner.py
+│               ├── motion_control/
+│               │   ├── attitude_controller.py
+│               │   ├── path_follower.py
+│               │   └── motion_controller.py
+│               ├── nodes/
+│               │   ├── perception_node.py
+│               │   ├── mission_planning_node.py
+│               │   ├── decision_node.py
+│               │   └── motion_control_node.py
+│               ├── simulation/terrain.py
+│               ├── simulation/validation.py   # Reproducible validation harness
+│               ├── system.py                 # End-to-end orchestration for experiments
+│               └── visualization/plots.py
+├── tests/
+│   └── test_hierarchical_stack.py
+└── main.py                                    # Root 
