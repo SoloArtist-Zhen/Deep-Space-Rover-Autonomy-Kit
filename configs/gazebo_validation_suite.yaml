@@ -1,0 +1,72 @@
+suite_name: gazebo_publishable_validation
+sim_backend: gazebo_harmonic
+output_prefix: gazebo_validation
+
+reproducibility:
+  seeds: [7, 11, 19]
+  max_cycles: 24
+  goal_tolerance: 2.0
+
+scenarios:
+  - name: nominal
+    terrain:
+      size: 64
+      crater_density: 1.0
+      roughness_gain: 1.0
+      elevation_scale: 1.0
+    sensors:
+      camera_noise_std: 5.0
+      camera_blur_sigma: 0.7
+      camera_delay_steps: 0
+      lidar_noise_std: 0.012
+      lidar_dropout_base: 0.04
+      lidar_delay_steps: 0
+    resources:
+      battery_level: 0.84
+      compute_load: 0.28
+      thermal_margin: 0.88
+      comms_bandwidth: 0.76
+      wheel_health: 0.96
+      memory_load: 0.22
+
+  - name: rugged_randomized
+    terrain:
+      size: 64
+      crater_density: 1.35
+      roughness_gain: 1.25
+      elevation_scale: 1.1
+    sensors:
+      camera_noise_std: 7.0
+      camera_blur_sigma: 0.9
+      camera_delay_steps: 1
+      lidar_noise_std: 0.016
+      lidar_dropout_base: 0.08
+      lidar_delay_steps: 1
+    resources:
+      battery_level: 0.8
+      compute_load: 0.34
+      thermal_margin: 0.82
+      comms_bandwidth: 0.72
+      wheel_health: 0.94
+      memory_load: 0.26
+
+  - name: delayed_degraded
+    terrain:
+      size: 64
+      crater_density: 1.2
+      roughness_gain: 1.15
+      elevation_scale: 1.05
+    sensors:
+      camera_noise_std: 9.0
+      camera_blur_sigma: 1.1
+      camera_delay_steps: 2
+      lidar_noise_std: 0.02
+      lidar_dropout_base: 0.12
+      lidar_delay_steps: 2
+    resources:
+      battery_level: 0.76
+      compute_load: 0.4
+      thermal_margin: 0.79
+      comms_bandwidth: 0.68
+      wheel_health: 0.92
+      memory_load: 0.3

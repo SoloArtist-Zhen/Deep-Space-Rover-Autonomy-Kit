@@ -1,0 +1,26 @@
+mission_profile:
+  name: lunar_science_campaign_alpha
+  planning_assumptions:
+    autonomy_stack: hierarchical_three_layer
+    scheduler: priority-energy-risk aware
+    global_goal: reach final relay corridor after science collection
+  resource_constraints:
+    battery_reserve: 0.20
+    compute_guard_band: 0.15
+    thermal_margin_min: 0.10
+  tasks:
+    - task_id: science_core_sample
+      type: science
+      priority: 0.95
+      science_value: 0.98
+      target: [66, 51]
+    - task_id: volatile_scan
+      type: science
+      priority: 0.82
+      science_value: 0.91
+      target: [87, 83]
+    - task_id: relay_alignment
+      type: relay
+      priority: 0.72
+      science_value: 0.50
+      target: [44, 94]

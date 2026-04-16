@@ -1,0 +1,512 @@
+{
+  "world_summary": {
+    "mean_slope": 0.045256707817316055,
+    "mean_risk": 0.3381900489330292,
+    "obstacle_ratio": 0.02797067901234568,
+    "traversability": 0.43353280425071716,
+    "mean_uncertainty": 0.3104188144207001,
+    "semantic_occupancy_mean": 0.36059343814849854,
+    "vision_confidence_mean": 0.0,
+    "lidar_confidence_mean": 0.8396426439285278,
+    "foundation_pretrained": 0.0
+  },
+  "perception": {
+    "semantic_class_names": [
+      "traversable_regolith",
+      "rock_boulder",
+      "crater_rim",
+      "shadow_hollow",
+      "steep_hazard"
+    ],
+    "foundation_metadata": {
+      "feature_backbone": "dinov2",
+      "checkpoint": "offline_random_init",
+      "pretrained": false,
+      "patch_grid": 16,
+      "projection_dim": 8,
+      "feature_norm_mean": 0.7925003170967102,
+      "semantic_entropy_mean": 0.9791427254676819
+    },
+    "semantic_occupancy_mean": 0.36059343814849854,
+    "semantic_uncertainty_mean": 0.5147519707679749
+  },
+  "resource_state": {
+    "battery_level": 0.76,
+    "compute_load": 0.34,
+    "thermal_margin": 0.81,
+    "comms_bandwidth": 0.72,
+    "wheel_health": 0.93,
+    "memory_load": 0.28
+  },
+  "mission_plan": {
+    "mission_id": "mission_alpha",
+    "rationale": "Scheduled 3 feasible tasks; active task is science_core_sample under nominal mode.",
+    "planner_constraints": {
+      "risk_limit": 0.72,
+      "energy_reserve": 0.427492,
+      "planning_budget": 0.2720558016
+    },
+    "scheduled_tasks": [
+      {
+        "task_id": "science_core_sample",
+        "task_type": "science",
+        "target": [
+          37,
+          28
+        ],
+        "priority": 0.95,
+        "science_value": 0.98,
+        "energy_cost": 0.24,
+        "required_bandwidth": 0.18,
+        "deadline": 0.8
+      },
+      {
+        "task_id": "volatile_scan",
+        "task_type": "science",
+        "target": [
+          48,
+          46
+        ],
+        "priority": 0.82,
+        "science_value": 0.91,
+        "energy_cost": 0.21,
+        "required_bandwidth": 0.22,
+        "deadline": 1.1
+      },
+      {
+        "task_id": "relay_alignment",
+        "task_type": "relay",
+        "target": [
+          25,
+          53
+        ],
+        "priority": 0.72,
+        "science_value": 0.5,
+        "energy_cost": 0.16,
+        "required_bandwidth": 0.4,
+        "deadline": 1.4
+      }
+    ]
+  },
+  "behavior": {
+    "active_task_id": "science_core_sample",
+    "target_point": [
+      37,
+      28
+    ],
+    "autonomy_mode": "science_execution",
+    "replan_required": false,
+    "rationale": "Tracking science_core_sample with local risk 0.228 against threshold 0.720 and belief uncertainty 0.310."
+  },
+  "path_plan": {
+    "planner_name": "mdp_mcts_belief",
+    "target_point": [
+      37,
+      28
+    ],
+    "path": [
+      [
+        7,
+        7
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        9,
+        7
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        11,
+        7
+      ],
+      [
+        12,
+        7
+      ],
+      [
+        13,
+        7
+      ]
+    ],
+    "action_sequence": [
+      "move_south",
+      "move_south",
+      "move_south",
+      "move_south",
+      "move_south",
+      "move_south"
+    ],
+    "path_cost": 4.346290111541748,
+    "energy_estimate": 0.578941317647695,
+    "risk_mean": 0.29820823669433594,
+    "annotations": {
+      "mdp_state_space": "position|obstacle_belief|remaining_energy|uncertainty",
+      "mdp_action_space": [
+        "move_north",
+        "move_south",
+        "move_west",
+        "move_east",
+        "scan",
+        "replan"
+      ],
+      "policy_iterations": 40,
+      "policy_horizon": 8,
+      "execution_horizon": 6,
+      "predicted_success": false,
+      "predicted_uncertainty_delta": 0.002030998468399048,
+      "final_uncertainty": 0.308387815952301,
+      "scheduled_tasks": 3,
+      "replan_required": false,
+      "root_decisions": [
+        {
+          "root_signature": [
+            7,
+            5,
+            4,
+            3,
+            2,
+            2,
+            0
+          ],
+          "action_statistics": {
+            "move_north": {
+              "visits": 1,
+              "q_value": -5.194841158655609,
+              "prior": 0.16666666666666666
+            },
+            "move_south": {
+              "visits": 27,
+              "q_value": -2.736446875923779,
+              "prior": 0.16666666666666666
+            },
+            "move_west": {
+              "visits": 1,
+              "q_value": -4.1319499244291205,
+              "prior": 0.16666666666666666
+            },
+            "move_east": {
+              "visits": 3,
+              "q_value": -3.624167666626308,
+              "prior": 0.16666666666666666
+            },
+            "scan": {
+              "visits": 5,
+              "q_value": -3.1344367780905875,
+              "prior": 0.16666666666666666
+            },
+            "replan": {
+              "visits": 3,
+              "q_value": -3.505180905659128,
+              "prior": 0.16666666666666666
+            }
+          },
+          "selected_action": "move_south"
+        },
+        {
+          "root_signature": [
+            7,
+            5,
+            4,
+            3,
+            1,
+            2,
+            0
+          ],
+          "action_statistics": {
+            "move_north": {
+              "visits": 1,
+              "q_value": -4.343021728637414,
+              "prior": 0.16666666666666666
+            },
+            "move_south": {
+              "visits": 16,
+              "q_value": -2.7697946428737534,
+              "prior": 0.16666666666666666
+            },
+            "move_west": {
+              "visits": 1,
+              "q_value": -4.106844682747665,
+              "prior": 0.16666666666666666
+            },
+            "move_east": {
+              "visits": 11,
+              "q_value": -2.605829698567979,
+              "prior": 0.16666666666666666
+            },
+            "scan": {
+              "visits": 5,
+              "q_value": -3.0414559114390363,
+              "prior": 0.16666666666666666
+            },
+            "replan": {
+              "visits": 6,
+              "q_value": -2.8740396870992613,
+              "prior": 0.16666666666666666
+            }
+          },
+          "selected_action": "move_south"
+        },
+        {
+          "root_signature": [
+            7,
+            5,
+            4,
+            3,
+            1,
+            2,
+            0
+          ],
+          "action_statistics": {
+            "move_north": {
+              "visits": 1,
+              "q_value": -4.273097203209412,
+              "prior": 0.16666666666666666
+            },
+            "move_south": {
+              "visits": 16,
+              "q_value": -2.657331574741332,
+              "prior": 0.16666666666666666
+            },
+            "move_west": {
+              "visits": 1,
+              "q_value": -4.013725021203191,
+              "prior": 0.16666666666666666
+            },
+            "move_east": {
+              "visits": 11,
+              "q_value": -2.4659436971639086,
+              "prior": 0.16666666666666666
+            },
+            "scan": {
+              "visits": 5,
+              "q_value": -2.9397038698000117,
+              "prior": 0.16666666666666666
+            },
+            "replan": {
+              "visits": 6,
+              "q_value": -2.781579209953263,
+              "prior": 0.16666666666666666
+            }
+          },
+          "selected_action": "move_south"
+        },
+        {
+          "root_signature": [
+            6,
+            5,
+            4,
+            3,
+            1,
+            2,
+            0
+          ],
+          "action_statistics": {
+            "move_north": {
+              "visits": 1,
+              "q_value": -4.096331442729951,
+              "prior": 0.16666666666666666
+            },
+            "move_south": {
+              "visits": 16,
+              "q_value": -2.5694679161020555,
+              "prior": 0.16666666666666666
+            },
+            "move_west": {
+              "visits": 1,
+              "q_value": -3.8660413076314417,
+              "prior": 0.16666666666666666
+            },
+            "move_east": {
+              "visits": 11,
+              "q_value": -2.3455325670539966,
+              "prior": 0.16666666666666666
+            },
+            "scan": {
+              "visits": 5,
+              "q_value": -2.7813152684423885,
+              "prior": 0.16666666666666666
+            },
+            "replan": {
+              "visits": 6,
+              "q_value": -2.614366415928477,
+              "prior": 0.16666666666666666
+            }
+          },
+          "selected_action": "move_south"
+        },
+        {
+          "root_signature": [
+            6,
+            5,
+            3,
+            3,
+            1,
+            2,
+            0
+          ],
+          "action_statistics": {
+            "move_north": {
+              "visits": 1,
+              "q_value": -4.196648987746986,
+              "prior": 0.16666666666666666
+            },
+            "move_south": {
+              "visits": 18,
+              "q_value": -2.298822939094468,
+              "prior": 0.16666666666666666
+            },
+            "move_west": {
+              "visits": 1,
+              "q_value": -3.5648657063229243,
+              "prior": 0.16666666666666666
+            },
+            "move_east": {
+              "visits": 12,
+              "q_value": -2.3081553293830646,
+              "prior": 0.16666666666666666
+            },
+            "scan": {
+              "visits": 3,
+              "q_value": -2.5422649984743266,
+              "prior": 0.16666666666666666
+            },
+            "replan": {
+              "visits": 5,
+              "q_value": -2.4987399190134196,
+              "prior": 0.16666666666666666
+            }
+          },
+          "selected_action": "move_south"
+        },
+        {
+          "root_signature": [
+            6,
+            5,
+            3,
+            3,
+            1,
+            2,
+            0
+          ],
+          "action_statistics": {
+            "move_north": {
+              "visits": 1,
+              "q_value": -3.7190731972606175,
+              "prior": 0.16666666666666666
+            },
+            "move_south": {
+              "visits": 16,
+              "q_value": -2.0959159530227307,
+              "prior": 0.16666666666666666
+            },
+            "move_west": {
+              "visits": 1,
+              "q_value": -3.5089373032007583,
+              "prior": 0.16666666666666666
+            },
+            "move_east": {
+              "visits": 5,
+              "q_value": -2.235423680658129,
+              "prior": 0.16666666666666666
+            },
+            "scan": {
+              "visits": 5,
+              "q_value": -2.4383335600842724,
+              "prior": 0.16666666666666666
+            },
+            "replan": {
+              "visits": 12,
+              "q_value": -1.956328306081739,
+              "prior": 0.16666666666666666
+            }
+          },
+          "selected_action": "move_south"
+        }
+      ]
+    }
+  },
+  "control_command": {
+    "mode": "track_path",
+    "target_waypoint": [
+      8,
+      7
+    ],
+    "linear_velocity": 0.7321398039907218,
+    "angular_velocity": 0.0,
+    "steering_angle": 0.0,
+    "attitude_profile": [
+      [
+        -0.017922204890139626,
+        -0.008587456363222033,
+        0.0
+      ],
+      [
+        -0.007651807409166913,
+        -0.030010199034962524,
+        0.0
+      ],
+      [
+        -0.00864811188005118,
+        -0.04440099980169633,
+        0.0
+      ],
+      [
+        -0.017234701718032618,
+        -0.050713604836228374,
+        0.0
+      ],
+      [
+        -0.029081102218666707,
+        -0.044174001961261575,
+        0.0
+      ],
+      [
+        -0.03195654676236918,
+        -0.023995404979130226,
+        0.0
+      ],
+      [
+        -0.023278504312871783,
+        -0.0030835849659051253,
+        0.0
+      ]
+    ],
+    "diagnostics": {
+      "planner": "mdp_mcts_belief",
+      "risk_at_target": 0.2413059026002884,
+      "energy_estimate": 0.578941317647695
+    }
+  },
+  "actuator_feedback": {
+    "drive_base": {
+      "linear_velocity": 0.7321398039907218,
+      "angular_velocity": 0.0,
+      "mode": "track_path"
+    },
+    "attitude_manager": {
+      "roll_setpoint": -0.017922204890139626,
+      "pitch_setpoint": -0.008587456363222033,
+      "yaw_setpoint": 0.0,
+      "steering_angle": 0.0
+    }
+  },
+  "artifacts": {
+    "risk_map": "fig20_hierarchical_risk.png",
+    "selected_path": "fig21_hierarchical_path.png",
+    "uncertainty_map": "fig22_mdp_uncertainty.png",
+    "semantic_occupancy": "fig24_semantic_occupancy.png"
+  },
+  "directory_layout": {
+    "legacy": "legacy/prototype",
+    "ros2_workspace": "ros2_ws/src/space_rover_autonomy",
+    "docs": "docs",
+    "experiments": "experiments",
+    "outputs": "outputs"
+  }
+}
